@@ -12,9 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "BoxVinil",
-      theme: ThemeData(
-        scaffoldBackgroundColor: const Color.fromARGB(255, 24, 24, 24), fontFamily: 'Roboto'
-      ),
+      theme: ThemeData(scaffoldBackgroundColor: const Color.fromARGB(255, 24, 24, 24), fontFamily: 'Roboto'),
       home: LoginScreen(),
     );
   }
