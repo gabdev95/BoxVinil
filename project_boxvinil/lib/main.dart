@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:project_boxvinil/screens/login_screen.dart';
 // import 'package:project_boxvinil/screens/register_screen.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -12,8 +11,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "BoxVinil",
-      theme: ThemeData(scaffoldBackgroundColor: const Color.fromARGB(255, 24, 24, 24), fontFamily: 'Roboto'),
-      home: LoginScreen(),
+      theme: ThemeData(
+        scaffoldBackgroundColor: const Color.fromARGB(255, 24, 24, 24),
+        fontFamily: 'Roboto',
+      ),
     );
   }
 }
