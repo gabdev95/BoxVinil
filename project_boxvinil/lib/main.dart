@@ -3,6 +3,10 @@ import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import './paginas/cadastro.dart';
 import './paginas/configuracoes.dart';
+import './paginas/login.dart';
+import './paginas/perfil.dart';
+import './paginas/playlist.dart';
+import './paginas/carregamento.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,9 +28,14 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color.fromARGB(255, 24, 24, 24),
         fontFamily: 'Roboto',
       ),
-      initialRoute: '/cadastro',
+      initialRoute: '/',
       routes: {
+        '/': (context) => const Carregamento(),
         '/cadastro': (context) => const TelaCadastro(),
+        '/login': (context) => const TelaLogin(),
+        '/playlist': (context) => const TelaPlaylist(),
+        '/perfil': (context) => const TelaPerfil(),
+        '/configuracao': (context) => const TelaConfiguracao(),
       },
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class TelaLogin extends StatefulWidget {
   const TelaLogin({super.key});
@@ -10,6 +11,42 @@ class TelaLogin extends StatefulWidget {
 class _TelaLoginState extends State<TelaLogin> {
   final _email = TextEditingController();
   final _senha = TextEditingController();
+
+  logar() async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _email.text, password: _senha.text);
+      Navigator.pushNamed(context, '/');
+    } on FirebaseAuthException catch (err) {
+      print(err);
+      if (err.code == 'invalid-email') {
+        print('Formato do email inválido');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Formato do email inválido'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+      if (err.code == 'user-not-found') {
+        print('Usuário não encontrado');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Usuário não encontrado'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      } else if (err.code == 'wrong-password') {
+        print('Senha incorreta');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Senha incorreta'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +122,7 @@ class _TelaLoginState extends State<TelaLogin> {
                       borderRadius: BorderRadius.circular(8)),
                   minimumSize: const Size(296, 40),
                 ),
-                onPressed: () {},
+                onPressed: logar,
                 child: const Text(
                   'Entrar',
                   style: TextStyle(
@@ -113,7 +150,9 @@ class _TelaLoginState extends State<TelaLogin> {
                   ),
                   // Hyperlink Cadastre-se
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/cadastro');
+                    },
                     child: const Text(
                       'Cadastre-se',
                       style: TextStyle(

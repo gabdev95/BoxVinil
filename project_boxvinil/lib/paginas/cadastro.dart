@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class TelaCadastro extends StatefulWidget {
   const TelaCadastro({super.key});
@@ -15,9 +16,78 @@ class _TelaCadastroState extends State<TelaCadastro> {
   final _confirmaSenha = TextEditingController();
   final _nome = TextEditingController();
 
-  void cadastrar() {
+  void cadastrar() async {
     final form = _formKey.currentState;
     if (form!.validate()) {}
+    if (_senha.text == _confirmaSenha.text) {
+      try {
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+                email: _email.text, password: _senha.text);
+        // Pop-up
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: Container(
+              height: 40,
+              width: 240,
+              decoration: BoxDecoration(
+                  color: const Color.fromRGBO(94, 242, 94, 1),
+                  borderRadius: BorderRadius.circular(100)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.check_circle_outline_rounded),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    'Cadastro Realizado',
+                    style: TextStyle(
+                      fontSize: 19,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Roboto',
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+        User? user = userCredential.user;
+        await user?.updateDisplayName(_nome.text);
+
+        Navigator.pushNamed(context, '/');
+      } on FirebaseAuthException catch (err) {
+        print(err);
+        if (err.code == 'invalid-email') {
+          print('Formato do email inválido');
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Formato do email inválido'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+        if (err.code == 'weak-password') {
+          print('Digite uma senha mais forte');
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Digite uma senha mais forte'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        } else if (err.code == 'email-already-in-use') {
+          print('Email já está em uso');
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Este email já está em uso'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    }
   }
 
   @override
@@ -246,7 +316,9 @@ class _TelaCadastroState extends State<TelaCadastro> {
                   ),
                   // Hyperlink Entrar
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/login');
+                    },
                     child: const Text(
                       'Entrar',
                       style: TextStyle(
