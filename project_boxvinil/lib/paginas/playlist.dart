@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class TelaPlaylist extends StatefulWidget {
   const TelaPlaylist({super.key});
@@ -8,8 +9,13 @@ class TelaPlaylist extends StatefulWidget {
 }
 
 class _TelaPlaylistState extends State<TelaPlaylist> {
+  final user = FirebaseAuth.instance.currentUser;
+
+  String? nome = '';
+
   @override
   Widget build(BuildContext context) {
+    nome = user!.displayName;
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -25,9 +31,9 @@ class _TelaPlaylistState extends State<TelaPlaylist> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Olá, João!',
-                      style: TextStyle(
+                    Text(
+                      'Olá, $nome!',
+                      style: const TextStyle(
                         color: Color.fromRGBO(248, 250, 255, 1),
                         fontFamily: 'Roboto',
                         fontSize: 23,
@@ -132,7 +138,9 @@ class _TelaPlaylistState extends State<TelaPlaylist> {
                 Column(
                   children: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/perfil');
+                      },
                       icon: const Icon(
                         Icons.perm_identity,
                         color: Color.fromRGBO(248, 250, 255, 1),

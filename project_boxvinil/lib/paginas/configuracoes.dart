@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class TelaConfiguracao extends StatefulWidget {
   const TelaConfiguracao({super.key});
@@ -8,10 +9,15 @@ class TelaConfiguracao extends StatefulWidget {
 }
 
 class _TelaConfiguracaoState extends State<TelaConfiguracao> {
+  final user = FirebaseAuth.instance.currentUser;
+
+  String? nome = '';
+
   final _nome = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    nome = user!.displayName;
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -21,7 +27,9 @@ class _TelaConfiguracaoState extends State<TelaConfiguracao> {
           ),
           IconButton(
             padding: const EdgeInsets.fromLTRB(32, 0, 0, 0),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/perfil');
+            },
             icon: const Icon(
               Icons.arrow_back,
               color: Color.fromRGBO(179, 179, 179, 1),
@@ -36,9 +44,9 @@ class _TelaConfiguracaoState extends State<TelaConfiguracao> {
                   height: 23,
                 ),
 
-                const Text(
-                  'Olá, João!',
-                  style: TextStyle(
+                Text(
+                  'Olá, $nome!',
+                  style: const TextStyle(
                     color: Color.fromRGBO(248, 250, 255, 1),
                     fontSize: 23,
                     fontFamily: 'Roboto',
@@ -92,7 +100,44 @@ class _TelaConfiguracaoState extends State<TelaConfiguracao> {
                         borderRadius: BorderRadius.circular(8)),
                     minimumSize: const Size(296, 40),
                   ),
-                  onPressed: () {},
+                  onPressed: () async {
+                    if (_nome.text != '') {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          content: Container(
+                            height: 40,
+                            width: 240,
+                            decoration: BoxDecoration(
+                                color: const Color.fromRGBO(94, 242, 94, 1),
+                                borderRadius: BorderRadius.circular(100)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Icon(Icons.check_circle_outline_rounded),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                Text(
+                                  'Alteração Realizada',
+                                  style: TextStyle(
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Roboto',
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                      User? user = FirebaseAuth.instance.currentUser;
+                      await user?.updateDisplayName(_nome.text);
+                      Navigator.pushNamed(context, '/perfil');
+                    } else {
+                      print('Nome não pode estar vazio');
+                    }
+                  },
                   child: const Text(
                     'Salvar',
                     style: TextStyle(
