@@ -64,7 +64,7 @@ class _TelaLoginState extends State<TelaLogin> {
               SizedBox(
                 width: 256.0,
                 height: 190.51,
-                child: Image.asset("images/logo.png"),
+                child: Image.asset("assets/images/logo.png"),
               ),
               const SizedBox(
                 height: 80.49,
