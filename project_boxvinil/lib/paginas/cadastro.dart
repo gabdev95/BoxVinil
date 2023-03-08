@@ -25,6 +25,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
             .createUserWithEmailAndPassword(
                 email: _email.text, password: _senha.text);
         // Pop-up
+        // ignore: use_build_context_synchronously
         showDialog(
           context: context,
           builder: (context) => AlertDialog(

@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "402694438233",
+    "firebase_url": "https://box-vinil-619c3-default-rtdb.firebaseio.com",
     "project_id": "box-vinil-619c3",
     "storage_bucket": "box-vinil-619c3.appspot.com"
   },
@@ -29,6 +30,13 @@
             {
               "client_id": "402694438233-m66st09uhtgcq71na6ghqchefsatu2e8.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "402694438233-sqs1e9ghnbhe661bj8pn2pa1b7trkqrd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.projectBoxvinil"
+              }
             }
           ]
         }

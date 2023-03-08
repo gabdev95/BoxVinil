@@ -44,7 +44,9 @@ class _TelaPlaylistState extends State<TelaPlaylist> {
                       height: 40,
                       width: 40,
                       child: FloatingActionButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/lista');
+                        },
                         backgroundColor: const Color.fromRGBO(50, 205, 50, 1),
                         child: const Icon(
                           Icons.add,

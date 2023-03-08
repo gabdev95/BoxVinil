@@ -18,6 +18,7 @@ class _TelaPerfilState extends State<TelaPerfil> {
     try {
       User? user = FirebaseAuth.instance.currentUser;
       await user?.delete();
+      // ignore: use_build_context_synchronously
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
