@@ -9,10 +9,18 @@ class TelaLista extends StatefulWidget {
 }
 
 class _TelaListaState extends State<TelaLista> {
-  DatabaseReference ref = FirebaseDatabase.instance.ref();
-
+  String realTimeValue = '0';
+  String getOnceValue = '0';
   @override
   Widget build(BuildContext context) {
+    DatabaseReference ref = FirebaseDatabase.instance.ref().child('count');
+
+    ref.onValue.listen((event) {
+      setState(() {
+        realTimeValue = event.snapshot.value.toString();
+      });
+    });
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -20,9 +28,32 @@ class _TelaListaState extends State<TelaLista> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Text(
+              'Real Time Counter: $realTimeValue',
+              style: const TextStyle(color: Colors.white),
+            ),
+            const SizedBox(
+              height: 50,
+            ),
             TextButton(
-              onPressed: () {},
-              child: Text('Botão'),
+              onPressed: () async {
+                final snapshot = await ref.get();
+                if (snapshot.exists) {
+                  setState(() {
+                    getOnceValue = snapshot.value.toString();
+                  });
+                } else {
+                  print('Nenhum dado disponível');
+                }
+              },
+              child: const Text('Botão'),
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+            Text(
+              'Real Time Counter: $getOnceValue',
+              style: const TextStyle(color: Colors.white),
             ),
           ],
         ),
