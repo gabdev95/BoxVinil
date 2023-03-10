@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import './componentes/opcoes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class TelaPerfil extends StatefulWidget {
   const TelaPerfil({super.key});
@@ -13,6 +14,8 @@ class _TelaPerfilState extends State<TelaPerfil> {
   final user = FirebaseAuth.instance.currentUser;
 
   String? nome = '';
+  List listaMusicas = [];
+  DatabaseReference ref = FirebaseDatabase.instance.ref().child('nome');
 
   deletarCadastro() async {
     try {
@@ -60,6 +63,23 @@ class _TelaPerfilState extends State<TelaPerfil> {
           ),
         );
       }
+    }
+  }
+
+  getNomesMusicas() async {
+    final snapshot = await ref.get();
+    if (snapshot.exists) {
+      setState(() {
+        listaMusicas = snapshot.value as List;
+      });
+      // ignore: use_build_context_synchronously
+      Navigator.pushNamed(
+        context,
+        '/lista',
+        arguments: listaMusicas,
+      );
+    } else {
+      print('Nenhum dado disponível');
     }
   }
 
@@ -167,7 +187,7 @@ class _TelaPerfilState extends State<TelaPerfil> {
                 Column(
                   children: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: getNomesMusicas,
                       icon: const Icon(
                         Icons.add_circle_outline,
                         color: Color.fromRGBO(248, 250, 255, 1),
