@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class TelaPlaylist extends StatefulWidget {
   const TelaPlaylist({super.key});
@@ -12,6 +13,25 @@ class _TelaPlaylistState extends State<TelaPlaylist> {
   final user = FirebaseAuth.instance.currentUser;
 
   String? nome = '';
+  List listaMusicas = [];
+  DatabaseReference ref = FirebaseDatabase.instance.ref().child('nome');
+
+  getNomesMusicas() async {
+    final snapshot = await ref.get();
+    if (snapshot.exists) {
+      setState(() {
+        listaMusicas = snapshot.value as List;
+      });
+      // ignore: use_build_context_synchronously
+      Navigator.pushNamed(
+        context,
+        '/lista',
+        arguments: listaMusicas,
+      );
+    } else {
+      print('Nenhum dado disponível');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +64,7 @@ class _TelaPlaylistState extends State<TelaPlaylist> {
                       height: 40,
                       width: 40,
                       child: FloatingActionButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/lista');
-                        },
+                        onPressed: getNomesMusicas,
                         backgroundColor: const Color.fromRGBO(50, 205, 50, 1),
                         child: const Icon(
                           Icons.add,
@@ -119,7 +137,7 @@ class _TelaPlaylistState extends State<TelaPlaylist> {
                 Column(
                   children: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: getNomesMusicas,
                       icon: const Icon(
                         Icons.add_circle_outline,
                         color: Color.fromRGBO(248, 250, 255, 1),
