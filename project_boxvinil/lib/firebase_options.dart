@@ -58,6 +58,7 @@ class DefaultFirebaseOptions {
     appId: '1:402694438233:android:899491e63fd4f36ac8a048',
     messagingSenderId: '402694438233',
     projectId: 'box-vinil-619c3',
+    databaseURL: 'https://box-vinil-619c3-default-rtdb.firebaseio.com',
     storageBucket: 'box-vinil-619c3.appspot.com',
   );
 
@@ -66,9 +67,9 @@ class DefaultFirebaseOptions {
     appId: '1:402694438233:ios:b0e1e858502d0d89c8a048',
     messagingSenderId: '402694438233',
     projectId: 'box-vinil-619c3',
+    databaseURL: 'https://box-vinil-619c3-default-rtdb.firebaseio.com',
     storageBucket: 'box-vinil-619c3.appspot.com',
-    iosClientId:
-        '402694438233-sqs1e9ghnbhe661bj8pn2pa1b7trkqrd.apps.googleusercontent.com',
+    iosClientId: '402694438233-sqs1e9ghnbhe661bj8pn2pa1b7trkqrd.apps.googleusercontent.com',
     iosBundleId: 'com.example.projectBoxvinil',
   );
 
@@ -77,9 +78,9 @@ class DefaultFirebaseOptions {
     appId: '1:402694438233:ios:b0e1e858502d0d89c8a048',
     messagingSenderId: '402694438233',
     projectId: 'box-vinil-619c3',
+    databaseURL: 'https://box-vinil-619c3-default-rtdb.firebaseio.com',
     storageBucket: 'box-vinil-619c3.appspot.com',
-    iosClientId:
-        '402694438233-sqs1e9ghnbhe661bj8pn2pa1b7trkqrd.apps.googleusercontent.com',
+    iosClientId: '402694438233-sqs1e9ghnbhe661bj8pn2pa1b7trkqrd.apps.googleusercontent.com',
     iosBundleId: 'com.example.projectBoxvinil',
   );
 }
