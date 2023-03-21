@@ -18,7 +18,7 @@ class _CarregamentoState extends State<Carregamento> {
       } else {
         print(user.displayName);
         // Estudar o Navigator, da pra otimizar isso aqui
-        Navigator.pushNamed(context, '/playlist');
+        Navigator.pushNamed(context, '/home');
       }
     });
   }
