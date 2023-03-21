@@ -88,7 +88,6 @@ class _TelaListaState extends State<TelaLista> {
                             ),
                           );
                           String cluster = musicas['cluster'];
-                          print(cluster);
                           var db =
                               FirebaseFirestore.instance.collection('spotify');
                           db
@@ -101,23 +100,20 @@ class _TelaListaState extends State<TelaLista> {
                               // print('${docSnapshot.data()['nome']}');
                               listaMusicas.add(docSnapshot.data()['nome']);
                             }
-                            // print(musicas);
                             final random = Random();
                             List playlist = [];
                             for (int i = 0; i < 10; i++) {
                               var musica = listaMusicas[
                                   random.nextInt(listaMusicas.length)];
-                              print(musica);
                               if (playlist.contains(musica)) {
                                 i -= 1;
                               } else {
                                 playlist.add(musica);
                               }
                             }
-                            print(playlist);
                             Navigator.pushNamed(
                               context,
-                              '/playlist',
+                              '/salvar',
                               arguments: playlist,
                             );
                           });
