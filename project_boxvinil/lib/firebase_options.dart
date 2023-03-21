@@ -69,7 +69,8 @@ class DefaultFirebaseOptions {
     projectId: 'box-vinil-619c3',
     databaseURL: 'https://box-vinil-619c3-default-rtdb.firebaseio.com',
     storageBucket: 'box-vinil-619c3.appspot.com',
-    iosClientId: '402694438233-sqs1e9ghnbhe661bj8pn2pa1b7trkqrd.apps.googleusercontent.com',
+    iosClientId:
+        '402694438233-sqs1e9ghnbhe661bj8pn2pa1b7trkqrd.apps.googleusercontent.com',
     iosBundleId: 'com.example.projectBoxvinil',
   );
 
@@ -80,7 +81,8 @@ class DefaultFirebaseOptions {
     projectId: 'box-vinil-619c3',
     databaseURL: 'https://box-vinil-619c3-default-rtdb.firebaseio.com',
     storageBucket: 'box-vinil-619c3.appspot.com',
-    iosClientId: '402694438233-sqs1e9ghnbhe661bj8pn2pa1b7trkqrd.apps.googleusercontent.com',
+    iosClientId:
+        '402694438233-sqs1e9ghnbhe661bj8pn2pa1b7trkqrd.apps.googleusercontent.com',
     iosBundleId: 'com.example.projectBoxvinil',
   );
 }
