@@ -111,6 +111,20 @@ class _TelaPerfilState extends State<TelaPerfil> {
                   height: 32,
                 ),
 
+                //Imagem de perfil
+
+                SizedBox(
+                  height: 120,
+                  width: double.infinity,
+                  child: Image.asset(
+                    "../assets/images/perfil.png",
+                    alignment: Alignment.center,
+                  ),
+                ),
+                const SizedBox(
+                  height: 56,
+                ),
+
                 // Opção de CONFIGURAÇÕES
                 Opcoes(
                   fn: () {
