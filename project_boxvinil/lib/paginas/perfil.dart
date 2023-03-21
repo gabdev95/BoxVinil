@@ -165,7 +165,7 @@ class _TelaPerfilState extends State<TelaPerfil> {
                   children: [
                     IconButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/playlist');
+                        Navigator.pushNamed(context, '/home');
                       },
                       icon: const Icon(
                         Icons.save,
