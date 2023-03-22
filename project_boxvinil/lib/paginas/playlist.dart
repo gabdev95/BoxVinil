@@ -13,10 +13,11 @@ class _TelaPlaylistState extends State<TelaPlaylist> {
   Widget build(BuildContext context) {
     Map<String, dynamic> argumentos =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+
     String nomePLaylist = argumentos['titulo'];
     List musicas = argumentos['lista'];
-    print(nomePLaylist);
-    print(musicas);
+    List artistas = argumentos['artistas'];
+
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,12 +52,52 @@ class _TelaPlaylistState extends State<TelaPlaylist> {
                 ),
                 IconButton(
                   onPressed: () {
-                    final docPlaylist = FirebaseFirestore.instance
-                        .collection('playlist')
-                        .doc(nomePLaylist)
-                        .delete();
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('Excluir playlist'),
+                        content: const Text(
+                            'Essa playlist será excluída da sua aba de playlists salva, você está ciente disso?'),
+                        actions: [
+                          ElevatedButton(
+                            style: const ButtonStyle(
+                              backgroundColor:
+                                  MaterialStatePropertyAll(Colors.red),
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text(
+                              'Não',
+                              style: TextStyle(
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          ElevatedButton(
+                            style: const ButtonStyle(
+                              backgroundColor: MaterialStatePropertyAll(
+                                Color.fromRGBO(50, 205, 50, 1),
+                              ),
+                            ),
+                            onPressed: () {
+                              final docPlaylist = FirebaseFirestore.instance
+                                  .collection('playlist')
+                                  .doc(nomePLaylist)
+                                  .delete();
 
-                    Navigator.pushNamed(context, '/home');
+                              Navigator.pushNamed(context, '/home');
+                            },
+                            child: const Text(
+                              'Sim',
+                              style: TextStyle(
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
                   },
                   icon: const Icon(
                     Icons.cancel_outlined,
@@ -80,6 +121,14 @@ class _TelaPlaylistState extends State<TelaPlaylist> {
                       color: Color.fromRGBO(179, 179, 179, 1),
                       fontWeight: FontWeight.w400,
                       fontSize: 19.2,
+                    ),
+                  ),
+                  subtitle: Text(
+                    artistas[index],
+                    style: const TextStyle(
+                      color: Color.fromRGBO(223, 219, 219, 1),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12,
                     ),
                   ),
                 );

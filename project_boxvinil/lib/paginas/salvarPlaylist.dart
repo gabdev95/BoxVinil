@@ -11,7 +11,10 @@ class TelaSalvarPlaylist extends StatefulWidget {
 class _TelaSalvarPlaylistState extends State<TelaSalvarPlaylist> {
   @override
   Widget build(BuildContext context) {
-    final playlist = ModalRoute.of(context)?.settings.arguments as List;
+    Map<String, dynamic> argumentos =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+    List playlist = argumentos['playlist'];
+    List artistas = argumentos['artistas'];
     final titulo = TextEditingController();
     return Scaffold(
       body: Column(
@@ -40,6 +43,7 @@ class _TelaSalvarPlaylistState extends State<TelaSalvarPlaylist> {
               controller: titulo,
               decoration: InputDecoration(
                 filled: true,
+                hintText: 'Digite o nome da playlist',
                 fillColor: const Color.fromRGBO(248, 250, 255, 1),
                 contentPadding: const EdgeInsets.fromLTRB(22, 8, 0, 8),
                 border: OutlineInputBorder(
@@ -66,6 +70,14 @@ class _TelaSalvarPlaylistState extends State<TelaSalvarPlaylist> {
                       color: Color.fromRGBO(179, 179, 179, 1),
                       fontWeight: FontWeight.w400,
                       fontSize: 19.2,
+                    ),
+                  ),
+                  subtitle: Text(
+                    artistas[index],
+                    style: const TextStyle(
+                      color: Color.fromRGBO(223, 219, 219, 1),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12,
                     ),
                   ),
                 );
@@ -106,6 +118,7 @@ class _TelaSalvarPlaylistState extends State<TelaSalvarPlaylist> {
                     docPlaylist.set({
                       'titulo': titulo.text,
                       'lista': playlist,
+                      'artistas': artistas,
                     });
 
                     Navigator.pushNamed(context, '/home');
