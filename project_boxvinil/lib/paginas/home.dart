@@ -116,15 +116,18 @@ class _TelaHomeState extends State<TelaHome> {
                                 .then((querySanpshot) {
                               print('Sucesso');
                               List musicas = [];
+                              List artistas = [];
                               for (var docSnapshot in querySanpshot.docs) {
                                 musicas = docSnapshot.data()['lista'];
+                                artistas = docSnapshot.data()['artistas'];
                               }
                               Navigator.pushNamed(
                                 context,
                                 '/playlist',
                                 arguments: {
                                   'titulo': playlists['titulo'],
-                                  'lista': musicas
+                                  'lista': musicas,
+                                  'artistas': artistas,
                                 },
                               );
                             });

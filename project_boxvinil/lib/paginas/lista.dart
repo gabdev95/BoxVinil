@@ -35,6 +35,11 @@ class _TelaListaState extends State<TelaLista> {
                     itemBuilder: (context, index) {
                       DocumentSnapshot musicas = snapshot.data!.docs[index];
                       return ListTile(
+                        leading: Container(
+                          height: 51,
+                          width: 51,
+                          color: const Color.fromRGBO(223, 219, 219, 1),
+                        ),
                         title: Text(
                           musicas['nome'],
                           style: const TextStyle(
@@ -49,12 +54,6 @@ class _TelaListaState extends State<TelaLista> {
                             color: Color.fromRGBO(223, 219, 219, 1),
                             fontWeight: FontWeight.w400,
                             fontSize: 12,
-                          ),
-                        ),
-                        trailing: Text(
-                          musicas['cluster'],
-                          style: const TextStyle(
-                            color: Colors.white,
                           ),
                         ),
                         onTap: () {
@@ -94,27 +93,34 @@ class _TelaListaState extends State<TelaLista> {
                               .where('cluster', isEqualTo: cluster)
                               .get()
                               .then((querySnapshot) {
-                            print('Sucesso');
                             List listaMusicas = [];
+                            List listaArtistas = [];
                             for (var docSnapshot in querySnapshot.docs) {
                               // print('${docSnapshot.data()['nome']}');
                               listaMusicas.add(docSnapshot.data()['nome']);
+                              listaArtistas.add(docSnapshot.data()['artista']);
                             }
                             final random = Random();
                             List playlist = [];
+                            List artistas = [];
                             for (int i = 0; i < 10; i++) {
-                              var musica = listaMusicas[
-                                  random.nextInt(listaMusicas.length)];
+                              var index = random.nextInt(listaMusicas.length);
+                              var musica = listaMusicas[index];
+                              var artista = listaArtistas[index];
                               if (playlist.contains(musica)) {
                                 i -= 1;
                               } else {
                                 playlist.add(musica);
+                                artistas.add(artista);
                               }
                             }
                             Navigator.pushNamed(
                               context,
                               '/salvar',
-                              arguments: playlist,
+                              arguments: {
+                                'playlist': playlist,
+                                'artistas': artistas,
+                              },
                             );
                           });
                         },
