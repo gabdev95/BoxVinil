@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -13,25 +14,6 @@ class _TelaHomeState extends State<TelaHome> {
   final user = FirebaseAuth.instance.currentUser;
 
   String? nome = '';
-  List listaMusicas = [];
-  DatabaseReference ref = FirebaseDatabase.instance.ref().child('nome');
-
-  getNomesMusicas() async {
-    final snapshot = await ref.get();
-    if (snapshot.exists) {
-      setState(() {
-        listaMusicas = snapshot.value as List;
-      });
-      // ignore: use_build_context_synchronously
-      Navigator.pushNamed(
-        context,
-        '/lista',
-        arguments: listaMusicas,
-      );
-    } else {
-      print('Nenhum dado disponível');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +46,9 @@ class _TelaHomeState extends State<TelaHome> {
                       height: 40,
                       width: 40,
                       child: FloatingActionButton(
-                        onPressed: getNomesMusicas,
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/lista');
+                        },
                         backgroundColor: const Color.fromRGBO(50, 205, 50, 1),
                         child: const Icon(
                           Icons.add,
@@ -90,15 +74,83 @@ class _TelaHomeState extends State<TelaHome> {
                 const SizedBox(
                   height: 32,
                 ),
-                const Text(
-                  'Não há playlists salvas',
-                  style: TextStyle(
-                      color: Color.fromRGBO(248, 250, 255, 1),
-                      fontFamily: 'Roboto',
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400),
-                ),
+                // const Text(
+                //   'Não há playlists salvas',
+                //   style: TextStyle(
+                //       color: Color.fromRGBO(248, 250, 255, 1),
+                //       fontFamily: 'Roboto',
+                //       fontSize: 12,
+                //       fontWeight: FontWeight.w400),
+                // ),
               ],
+            ),
+          ),
+          Expanded(
+            child: StreamBuilder(
+              stream:
+                  FirebaseFirestore.instance.collection('playlist').snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Text(
+                    'Não há playlists salvas',
+                    style: TextStyle(
+                        color: Color.fromRGBO(248, 250, 255, 1),
+                        fontFamily: 'Roboto',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400),
+                  );
+                } else {
+                  return ListView.builder(
+                    itemCount: snapshot.data?.docs.length,
+                    itemBuilder: (context, index) {
+                      DocumentSnapshot playlists = snapshot.data!.docs[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 34),
+                        child: TextButton(
+                          onPressed: () {
+                            var db = FirebaseFirestore.instance
+                                .collection('playlist');
+                            db
+                                .where('titulo', isEqualTo: playlists['titulo'])
+                                .get()
+                                .then((querySanpshot) {
+                              print('Sucesso');
+                              List musicas = [];
+                              for (var docSnapshot in querySanpshot.docs) {
+                                musicas = docSnapshot.data()['lista'];
+                              }
+                              Navigator.pushNamed(
+                                context,
+                                '/playlist',
+                                arguments: {
+                                  'titulo': playlists['titulo'],
+                                  'lista': musicas
+                                },
+                              );
+                            });
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                playlists['titulo'],
+                                style: const TextStyle(
+                                    fontSize: 19.2,
+                                    color: Color.fromRGBO(179, 179, 179, 1),
+                                    fontWeight: FontWeight.w400),
+                              ),
+                              const Icon(
+                                Icons.check_circle_rounded,
+                                color: Color.fromRGBO(50, 205, 50, 1),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }
+              },
             ),
           ),
 

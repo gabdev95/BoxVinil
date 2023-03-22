@@ -9,6 +9,7 @@ import 'paginas/home.dart';
 import './paginas/carregamento.dart';
 import './paginas/lista.dart';
 import 'paginas/salvarPlaylist.dart';
+import './paginas/playlist.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
         '/configuracao': (context) => const TelaConfiguracao(),
         '/lista': (context) => const TelaLista(),
         '/salvar': (context) => const TelaSalvarPlaylist(),
+        '/playlist': (context) => const TelaPlaylist(),
       },
     );
   }
