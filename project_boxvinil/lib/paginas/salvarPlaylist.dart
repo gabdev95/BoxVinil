@@ -99,8 +99,9 @@ class _TelaSalvarPlaylistState extends State<TelaSalvarPlaylist> {
                   if (titulo.text.isEmpty) {
                     return;
                   } else {
-                    final docPlaylist =
-                        FirebaseFirestore.instance.collection('playlist').doc();
+                    final docPlaylist = FirebaseFirestore.instance
+                        .collection('playlist')
+                        .doc(titulo.text);
 
                     docPlaylist.set({
                       'titulo': titulo.text,
