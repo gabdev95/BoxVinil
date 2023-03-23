@@ -57,20 +57,36 @@ class _TelaPlaylistState extends State<TelaPlaylist> {
                       builder: (context) => AlertDialog(
                         title: Text('Excluir playlist'),
                         content: const Text(
-                            'Essa playlist será excluída da sua aba de playlists salva, você está ciente disso?'),
+                            'Essa playlist será excluída da sua aba de playlists salvas, você está ciente disso?'),
                         actions: [
-                          ElevatedButton(
-                            style: const ButtonStyle(
-                              backgroundColor:
-                                  MaterialStatePropertyAll(Colors.red),
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text(
-                              'Não',
-                              style: TextStyle(
-                                color: Colors.black,
+                          Container(
+                            height: 33,
+                            width: 50,
+                            decoration: const BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                              width: 3,
+                              color: Colors.red,
+                            ))),
+                            child: TextButton(
+                              // style: const ButtonStyle(
+                              //   // backgroundColor:
+                              //   //     MaterialStatePropertyAll(Colors.red),
+                              //   side: MaterialStatePropertyAll(
+                              //     BorderSide(
+                              //       width: 3,
+                              //       color: Colors.red,
+                              //     ),
+                              //   ),
+                              // ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text(
+                                'Não',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
                           ),

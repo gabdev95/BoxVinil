@@ -17,10 +17,8 @@ class _TelaListaState extends State<TelaLista> {
         children: [
           Expanded(
             child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('spotify')
-                  // .where('cluster', isEqualTo: '0')
-                  .snapshots(),
+              stream:
+                  FirebaseFirestore.instance.collection('spotify').snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const Text(
@@ -34,6 +32,8 @@ class _TelaListaState extends State<TelaLista> {
                     itemCount: snapshot.data?.docs.length,
                     itemBuilder: (context, index) {
                       DocumentSnapshot musicas = snapshot.data!.docs[index];
+                      // A partir daqui eu tenho acesso ao id de cada música
+                      // var id = musicas.id;
                       return ListTile(
                         leading: Container(
                           height: 51,
@@ -86,6 +86,7 @@ class _TelaListaState extends State<TelaLista> {
                               ),
                             ),
                           );
+                          // Armazena o cluster da música clicada
                           String cluster = musicas['cluster'];
                           var db =
                               FirebaseFirestore.instance.collection('spotify');
@@ -95,23 +96,30 @@ class _TelaListaState extends State<TelaLista> {
                               .then((querySnapshot) {
                             List listaMusicas = [];
                             List listaArtistas = [];
+                            List listaId = [];
                             for (var docSnapshot in querySnapshot.docs) {
-                              // print('${docSnapshot.data()['nome']}');
+                              // Todas as músicas do cluster armazenado
                               listaMusicas.add(docSnapshot.data()['nome']);
+                              // Todas os artistas do cluster armazenado
                               listaArtistas.add(docSnapshot.data()['artista']);
+                              // Todos os id do cluster armazenado
+                              listaId.add(docSnapshot.id);
                             }
                             final random = Random();
                             List playlist = [];
                             List artistas = [];
+                            List ids = [];
                             for (int i = 0; i < 10; i++) {
                               var index = random.nextInt(listaMusicas.length);
                               var musica = listaMusicas[index];
                               var artista = listaArtistas[index];
+                              var id = listaId[index];
                               if (playlist.contains(musica)) {
                                 i -= 1;
                               } else {
                                 playlist.add(musica);
                                 artistas.add(artista);
+                                ids.add(id);
                               }
                             }
                             Navigator.pushNamed(
@@ -120,6 +128,7 @@ class _TelaListaState extends State<TelaLista> {
                               arguments: {
                                 'playlist': playlist,
                                 'artistas': artistas,
+                                'id': ids,
                               },
                             );
                           });

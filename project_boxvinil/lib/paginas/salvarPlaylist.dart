@@ -15,6 +15,7 @@ class _TelaSalvarPlaylistState extends State<TelaSalvarPlaylist> {
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
     List playlist = argumentos['playlist'];
     List artistas = argumentos['artistas'];
+    List id = argumentos['id'];
     final titulo = TextEditingController();
     return Scaffold(
       body: Column(
@@ -111,14 +112,14 @@ class _TelaSalvarPlaylistState extends State<TelaSalvarPlaylist> {
                   if (titulo.text.isEmpty) {
                     return;
                   } else {
-                    final docPlaylist = FirebaseFirestore.instance
-                        .collection('playlist')
-                        .doc(titulo.text);
+                    final docPlaylist =
+                        FirebaseFirestore.instance.collection('playlist').doc();
 
                     docPlaylist.set({
-                      'titulo': titulo.text,
+                      'nome': titulo.text,
                       'lista': playlist,
                       'artistas': artistas,
+                      'musicas': id,
                     });
 
                     Navigator.pushNamed(context, '/home');

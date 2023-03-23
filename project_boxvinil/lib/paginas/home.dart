@@ -111,7 +111,7 @@ class _TelaHomeState extends State<TelaHome> {
                             var db = FirebaseFirestore.instance
                                 .collection('playlist');
                             db
-                                .where('titulo', isEqualTo: playlists['titulo'])
+                                .where('nome', isEqualTo: playlists['nome'])
                                 .get()
                                 .then((querySanpshot) {
                               print('Sucesso');
@@ -125,7 +125,7 @@ class _TelaHomeState extends State<TelaHome> {
                                 context,
                                 '/playlist',
                                 arguments: {
-                                  'titulo': playlists['titulo'],
+                                  'titulo': playlists['nome'],
                                   'lista': musicas,
                                   'artistas': artistas,
                                 },
@@ -136,7 +136,7 @@ class _TelaHomeState extends State<TelaHome> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                playlists['titulo'],
+                                playlists['nome'],
                                 style: const TextStyle(
                                     fontSize: 19.2,
                                     color: Color.fromRGBO(179, 179, 179, 1),
