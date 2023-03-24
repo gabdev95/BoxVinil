@@ -54,6 +54,17 @@ class _TelaConfiguracaoState extends State<TelaConfiguracao> {
                   ),
                 ),
 
+                // Imagem de perfil
+
+                SizedBox(
+                  height: 120,
+                  width: double.infinity,
+                  child: Image.asset(
+                    "../assets/images/perfil.png",
+                    alignment: Alignment.center,
+                  ),
+                ),
+
                 const SizedBox(
                   height: 32,
                 ),
