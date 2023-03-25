@@ -16,6 +16,7 @@ class _TelaSalvarPlaylistState extends State<TelaSalvarPlaylist> {
     List playlist = argumentos['playlist'];
     List artistas = argumentos['artistas'];
     List id = argumentos['id'];
+    List musicas = argumentos['referencias'];
     final titulo = TextEditingController();
     return Scaffold(
       body: Column(
@@ -119,7 +120,7 @@ class _TelaSalvarPlaylistState extends State<TelaSalvarPlaylist> {
                       'nome': titulo.text,
                       'lista': playlist,
                       'artistas': artistas,
-                      'musicas': id,
+                      'musicas': musicas,
                     });
 
                     Navigator.pushNamed(context, '/home');
@@ -132,86 +133,6 @@ class _TelaSalvarPlaylistState extends State<TelaSalvarPlaylist> {
               ),
             ],
           ),
-          // Container(
-          //   height: 72,
-          //   width: double.infinity,
-          //   decoration: const BoxDecoration(
-          //     color: Color.fromRGBO(36, 36, 36, 1),
-          //     borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          //   ),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-          //     children: [
-          //       Column(
-          //         children: [
-          //           IconButton(
-          //             onPressed: () {
-          //               Navigator.pushNamed(context, '/home');
-          //             },
-          //             icon: const Icon(
-          //               Icons.save,
-          //               color: Color.fromRGBO(248, 250, 255, 1),
-          //               size: 24,
-          //             ),
-          //           ),
-          //           const Text(
-          //             'Playlists',
-          //             style: TextStyle(
-          //               fontFamily: 'Roboto',
-          //               fontSize: 12,
-          //               fontWeight: FontWeight.w400,
-          //               color: Color.fromRGBO(248, 250, 255, 1),
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //       Column(
-          //         children: [
-          //           IconButton(
-          //             onPressed: () {},
-          //             icon: const Icon(
-          //               Icons.add_circle_outline,
-          //               color: Color.fromRGBO(50, 205, 50, 1),
-          //               size: 24,
-          //             ),
-          //           ),
-          //           const Text(
-          //             'Gerar Playlist',
-          //             style: TextStyle(
-          //               fontFamily: 'Roboto',
-          //               fontSize: 12,
-          //               fontWeight: FontWeight.w400,
-          //               color: Color.fromRGBO(50, 205, 50, 1),
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //       Column(
-          //         children: [
-          //           IconButton(
-          //             onPressed: () {
-          //               Navigator.pushNamed(context, '/perfil');
-          //             },
-          //             icon: const Icon(
-          //               Icons.perm_identity,
-          //               color: Color.fromRGBO(248, 250, 255, 1),
-          //               size: 24,
-          //             ),
-          //           ),
-          //           const Text(
-          //             'Perfil',
-          //             style: TextStyle(
-          //               fontFamily: 'Roboto',
-          //               fontSize: 12,
-          //               fontWeight: FontWeight.w400,
-          //               color: Color.fromRGBO(248, 250, 255, 1),
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //     ],
-          //   ),
-          // ),
         ],
       ),
     );

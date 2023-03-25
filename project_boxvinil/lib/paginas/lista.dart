@@ -109,17 +109,21 @@ class _TelaListaState extends State<TelaLista> {
                             List playlist = [];
                             List artistas = [];
                             List ids = [];
+                            var listaRef = [];
                             for (int i = 0; i < 10; i++) {
                               var index = random.nextInt(listaMusicas.length);
                               var musica = listaMusicas[index];
                               var artista = listaArtistas[index];
                               var id = listaId[index];
+                              DocumentReference musicasRef = db.doc(id);
+
                               if (playlist.contains(musica)) {
                                 i -= 1;
                               } else {
                                 playlist.add(musica);
                                 artistas.add(artista);
                                 ids.add(id);
+                                listaRef.add(musicasRef);
                               }
                             }
                             Navigator.pushNamed(
@@ -129,6 +133,7 @@ class _TelaListaState extends State<TelaLista> {
                                 'playlist': playlist,
                                 'artistas': artistas,
                                 'id': ids,
+                                'referencias': listaRef,
                               },
                             );
                           });

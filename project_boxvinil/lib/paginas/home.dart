@@ -11,6 +11,7 @@ class TelaHome extends StatefulWidget {
 }
 
 class _TelaHomeState extends State<TelaHome> {
+  // Chave para pegar o email está aqui
   final user = FirebaseAuth.instance.currentUser;
 
   String? nome = '';
@@ -74,14 +75,6 @@ class _TelaHomeState extends State<TelaHome> {
                 const SizedBox(
                   height: 32,
                 ),
-                // const Text(
-                //   'Não há playlists salvas',
-                //   style: TextStyle(
-                //       color: Color.fromRGBO(248, 250, 255, 1),
-                //       fontFamily: 'Roboto',
-                //       fontSize: 12,
-                //       fontWeight: FontWeight.w400),
-                // ),
               ],
             ),
           ),
@@ -99,60 +92,73 @@ class _TelaHomeState extends State<TelaHome> {
                         fontSize: 12,
                         fontWeight: FontWeight.w400),
                   );
-                } else {
-                  return ListView.builder(
-                    itemCount: snapshot.data?.docs.length,
-                    itemBuilder: (context, index) {
-                      DocumentSnapshot playlists = snapshot.data!.docs[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 34),
-                        child: TextButton(
-                          onPressed: () {
-                            var db = FirebaseFirestore.instance
-                                .collection('playlist');
-                            db
-                                .where('nome', isEqualTo: playlists['nome'])
-                                .get()
-                                .then((querySanpshot) {
-                              print('Sucesso');
-                              List musicas = [];
-                              List artistas = [];
-                              for (var docSnapshot in querySanpshot.docs) {
-                                musicas = docSnapshot.data()['lista'];
-                                artistas = docSnapshot.data()['artistas'];
-                              }
-                              Navigator.pushNamed(
-                                context,
-                                '/playlist',
-                                arguments: {
-                                  'titulo': playlists['nome'],
-                                  'lista': musicas,
-                                  'artistas': artistas,
-                                },
-                              );
-                            });
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                playlists['nome'],
-                                style: const TextStyle(
-                                    fontSize: 19.2,
-                                    color: Color.fromRGBO(179, 179, 179, 1),
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              const Icon(
-                                Icons.check_circle_rounded,
-                                color: Color.fromRGBO(50, 205, 50, 1),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
                 }
+                // Todas as playlists da coleção playlists
+                List playlists = snapshot.data!.docs;
+
+                return ListView.builder(
+                  itemCount: snapshot.data?.docs.length,
+                  itemBuilder: (context, index) {
+                    // Informações de cada playlist
+                    DocumentSnapshot playlist = playlists[index];
+                    // Pegando id do documento da coleção playlist
+                    var docIdPlaylist = playlist.id;
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 34),
+                      child: TextButton(
+                        onPressed: () {
+                          var dbPlaylist =
+                              FirebaseFirestore.instance.collection('playlist');
+                          dbPlaylist
+                              .where('nome', isEqualTo: playlist['nome'])
+                              .get()
+                              .then((querySanpshot) {
+                            List musicas = [];
+                            List artistas = [];
+                            List idRefMusicas = [];
+
+                            for (var docSnapshot in querySanpshot.docs) {
+                              musicas = docSnapshot.data()['lista'];
+                              artistas = docSnapshot.data()['artistas'];
+                              // Lista com o docId das músicas da coleção spotify
+                              idRefMusicas = docSnapshot.data()['musicas'];
+                            }
+
+                            // teste(id);
+
+                            Navigator.pushNamed(
+                              context,
+                              '/playlist',
+                              arguments: {
+                                'titulo': playlist['nome'],
+                                'idRefMusicas': idRefMusicas,
+                                'docId': docIdPlaylist,
+                                'lista': musicas,
+                                'artistas': artistas,
+                              },
+                            );
+                          });
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              playlist['nome'],
+                              style: const TextStyle(
+                                  fontSize: 19.2,
+                                  color: Color.fromRGBO(179, 179, 179, 1),
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            const Icon(
+                              Icons.check_circle_rounded,
+                              color: Color.fromRGBO(50, 205, 50, 1),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
               },
             ),
           ),
@@ -241,5 +247,31 @@ class _TelaHomeState extends State<TelaHome> {
         ],
       ),
     );
+  }
+
+  Future teste(id) async {
+    var nomeMusicas = <Future>[];
+    var nomeArtistas = <Future>[];
+    var dbSpotify = FirebaseFirestore.instance.collection('spotify');
+
+    for (var index = 0; index < 10; index++) {
+      var docRef = dbSpotify.doc(id[index]);
+      docRef.get().then((docSnapshot) {
+        if (docSnapshot.exists) {
+          var data = docSnapshot.data();
+          nomeMusicas.add(data!['nome']);
+          nomeArtistas.add(data['artista']);
+          return nomeMusicas;
+        } else {
+          print('Documento não foi encontrado');
+        }
+        // Fora daqui não consigo mais acessar nomeMusicas ou nomeArtistas
+        print(nomeMusicas);
+      });
+    }
+    await Future.wait(nomeMusicas);
+    await Future.wait(nomeArtistas);
+    print(nomeMusicas);
+    print(nomeArtistas);
   }
 }

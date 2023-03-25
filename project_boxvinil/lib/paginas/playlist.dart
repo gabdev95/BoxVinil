@@ -11,12 +11,15 @@ class TelaPlaylist extends StatefulWidget {
 class _TelaPlaylistState extends State<TelaPlaylist> {
   @override
   Widget build(BuildContext context) {
+    // Recebendo argumentos da página home
     Map<String, dynamic> argumentos =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
 
     String nomePLaylist = argumentos['titulo'];
-    List musicas = argumentos['lista'];
-    List artistas = argumentos['artistas'];
+    String docId = argumentos['docId'];
+    List idMusicas = argumentos['idRefMusicas'];
+    List nomeMusicas = argumentos['lista'];
+    List nomeArtistas = argumentos['artistas'];
 
     return Scaffold(
       body: Column(
@@ -55,7 +58,7 @@ class _TelaPlaylistState extends State<TelaPlaylist> {
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                        title: Text('Excluir playlist'),
+                        title: const Text('Excluir playlist'),
                         content: const Text(
                             'Essa playlist será excluída da sua aba de playlists salvas, você está ciente disso?'),
                         actions: [
@@ -69,16 +72,6 @@ class _TelaPlaylistState extends State<TelaPlaylist> {
                               color: Colors.red,
                             ))),
                             child: TextButton(
-                              // style: const ButtonStyle(
-                              //   // backgroundColor:
-                              //   //     MaterialStatePropertyAll(Colors.red),
-                              //   side: MaterialStatePropertyAll(
-                              //     BorderSide(
-                              //       width: 3,
-                              //       color: Colors.red,
-                              //     ),
-                              //   ),
-                              // ),
                               onPressed: () {
                                 Navigator.pop(context);
                               },
@@ -98,9 +91,9 @@ class _TelaPlaylistState extends State<TelaPlaylist> {
                             ),
                             onPressed: () {
                               final docPlaylist = FirebaseFirestore.instance
-                                  .collection('playlist')
-                                  .doc(nomePLaylist)
-                                  .delete();
+                                  .collection('playlist');
+
+                              docPlaylist.doc(docId).delete();
 
                               Navigator.pushNamed(context, '/home');
                             },
@@ -127,30 +120,115 @@ class _TelaPlaylistState extends State<TelaPlaylist> {
             height: 25,
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: musicas.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(
-                    musicas[index],
-                    style: const TextStyle(
-                      color: Color.fromRGBO(179, 179, 179, 1),
-                      fontWeight: FontWeight.w400,
-                      fontSize: 19.2,
-                    ),
-                  ),
-                  subtitle: Text(
-                    artistas[index],
-                    style: const TextStyle(
-                      color: Color.fromRGBO(223, 219, 219, 1),
-                      fontWeight: FontWeight.w400,
-                      fontSize: 12,
-                    ),
-                  ),
+            child: FutureBuilder(
+              future: Future.wait(
+                  [getNomeMusicas(idMusicas), getNomeArtistas(idMusicas)]),
+              builder: (context, musicaSnapshot) {
+                if (!musicaSnapshot.hasData) {
+                  return CircularProgressIndicator();
+                }
+                List musicas = musicaSnapshot.data![0];
+                List artistas = musicaSnapshot.data![1];
+                return ListView.builder(
+                  itemCount: musicas.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(
+                        musicas[index],
+                        style: const TextStyle(
+                          color: Color.fromRGBO(179, 179, 179, 1),
+                          fontWeight: FontWeight.w400,
+                          fontSize: 19.2,
+                        ),
+                      ),
+                      subtitle: Text(
+                        artistas[index],
+                        style: const TextStyle(
+                          color: Color.fromRGBO(223, 219, 219, 1),
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12,
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
             ),
           ),
+          // Expanded(
+          //   child: StreamBuilder(
+          //     stream:
+          //         FirebaseFirestore.instance.collection('playlist').snapshots(),
+          //     builder: (context, snapshot) {
+          //       if (!snapshot.hasData) {
+          //         return CircularProgressIndicator();
+          //       } else {
+          //         List playlists = snapshot.data!.docs;
+
+          //         return FutureBuilder(
+          //           future: Future.wait([
+          //             getNomeMusicas(idMusicas),
+          //             getNomeArtistas(idMusicas)
+          //           ]),
+          //           builder: (context, musicaSnapshot) {
+          //             if (!musicaSnapshot.hasData) {
+          //               return CircularProgressIndicator();
+          //             }
+          //             List musicas = musicaSnapshot.data![0];
+          //             List artistas = musicaSnapshot.data![1];
+          //             return ListView.builder(
+          //               itemCount: musicas.length,
+          //               itemBuilder: (context, index) {
+          //                 return ListTile(
+          //                   title: Text(
+          //                     musicas[index],
+          //                     style: const TextStyle(
+          //                       color: Color.fromRGBO(179, 179, 179, 1),
+          //                       fontWeight: FontWeight.w400,
+          //                       fontSize: 19.2,
+          //                     ),
+          //                   ),
+          //                   subtitle: Text(
+          //                     artistas[index],
+          //                     style: const TextStyle(
+          //                       color: Color.fromRGBO(223, 219, 219, 1),
+          //                       fontWeight: FontWeight.w400,
+          //                       fontSize: 12,
+          //                     ),
+          //                   ),
+          //                 );
+          //               },
+          //             );
+          //           },
+          //         );
+          //       }
+          //     },
+          //   ),
+          // ),
+          // Expanded(
+          //   child: ListView.builder(
+          //     itemCount: idMusicas.length,
+          //     itemBuilder: (context, index) {
+          //       DocumentSnapshot id = idMusicas[index];
+
+          //       // List musicaRefs = List.from(playlist.get('musicas'));
+
+          //       return FutureBuilder(
+          //         future: getNome(idMusicas),
+          //         builder: (context, musicaSnapshot) {
+          //           if (!musicaSnapshot.hasData) {
+          //             return Text('Aguardando');
+          //           }
+          //           List musicas = musicaSnapshot.data as List;
+          //           print(musicas);
+          //           return ListTile(
+          //             title: Text(musicas[index]),
+          //           );
+          //         },
+          //       );
+          //     },
+          //   ),
+          // ),
           Container(
             height: 72,
             width: double.infinity,
@@ -234,5 +312,25 @@ class _TelaPlaylistState extends State<TelaPlaylist> {
         ],
       ),
     );
+  }
+
+  Future<List<String>> getNomeMusicas(musicaRefs) async {
+    List<String> nomeMusicas = [];
+    for (var i = 0; i < musicaRefs.length; i++) {
+      DocumentSnapshot musicaSnapshot = await musicaRefs[i].get();
+      nomeMusicas.add(musicaSnapshot.get('nome'));
+    }
+
+    return nomeMusicas;
+  }
+
+  Future<List<String>> getNomeArtistas(musicaRefs) async {
+    List<String> nomeArtistas = [];
+    for (var i = 0; i < musicaRefs.length; i++) {
+      DocumentSnapshot musicaSnapshot = await musicaRefs[i].get();
+      nomeArtistas.add(musicaSnapshot.get('artista'));
+    }
+
+    return nomeArtistas;
   }
 }
