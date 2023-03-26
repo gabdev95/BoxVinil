@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
 
 class TelaConfiguracao extends StatefulWidget {
   const TelaConfiguracao({super.key});
@@ -9,11 +12,45 @@ class TelaConfiguracao extends StatefulWidget {
 }
 
 class _TelaConfiguracaoState extends State<TelaConfiguracao> {
-  final user = FirebaseAuth.instance.currentUser;
-
+  var user = FirebaseAuth.instance.currentUser;
+  File? _imageFile;
   String? nome = '';
+  final FirebaseStorage storage = FirebaseStorage.instance;
 
   final _nome = TextEditingController();
+
+  void initState() {
+    super.initState();
+    _imageFile = File(user?.photoURL ?? "../assets/images/perfil.png");
+    _nome.text = user?.displayName ?? "";
+  }
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      _imageFile = File(pickedFile!.path);
+    });
+  }
+
+  Future<void> _uploadUser() async {
+    if (_imageFile == null) return;
+
+    XFile file = XFile(_imageFile!.path);
+    try {
+      String ref = 'images/${user?.uid}.jpg';
+      var task = await storage.ref(ref).putData(await file.readAsBytes());
+
+      String downloadUrl = await task.ref.getDownloadURL();
+      await user?.updatePhotoURL(downloadUrl);
+      await user?.updateDisplayName(_nome.text);
+      Navigator.pushNamed(context, '/perfil');
+      return;
+    } on FirebaseException catch (e) {
+      throw Exception('Erro no upload: ${e.code}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,13 +93,20 @@ class _TelaConfiguracaoState extends State<TelaConfiguracao> {
 
                 // Imagem de perfil
 
-                SizedBox(
-                  height: 120,
-                  width: double.infinity,
-                  child: Image.asset(
-                    "../assets/images/perfil.png",
-                    alignment: Alignment.center,
-                  ),
+                CircleAvatar(
+                  backgroundImage: NetworkImage(
+                      _imageFile!.path ?? "../assets/images/perfil.png"),
+                  radius: 50,
+                ),
+
+                // Pick Image
+                Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: _pickImage,
+                      child: Text('Atualizar Imagem'),
+                    ),
+                  ],
                 ),
 
                 const SizedBox(
@@ -113,6 +157,7 @@ class _TelaConfiguracaoState extends State<TelaConfiguracao> {
                   ),
                   onPressed: () async {
                     if (_nome.text != '') {
+                      _uploadUser();
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
@@ -142,9 +187,6 @@ class _TelaConfiguracaoState extends State<TelaConfiguracao> {
                           ),
                         ),
                       );
-                      User? user = FirebaseAuth.instance.currentUser;
-                      await user?.updateDisplayName(_nome.text);
-                      Navigator.pushNamed(context, '/perfil');
                     } else {
                       print('Nome não pode estar vazio');
                     }
