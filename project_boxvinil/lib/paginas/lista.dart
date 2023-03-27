@@ -15,6 +15,27 @@ class _TelaListaState extends State<TelaLista> {
     return Scaffold(
       body: Column(
         children: [
+          const SizedBox(
+            height: 48,
+          ),
+          const SizedBox(
+            width: 360,
+            child: Text(
+              'Selecione uma música',
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: Color.fromRGBO(248, 250, 255, 1),
+                fontFamily: 'Roboto',
+                fontSize: 24,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          const SizedBox(
+            height: 32,
+          ),
           Expanded(
             child: StreamBuilder(
               stream:
