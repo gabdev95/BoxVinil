@@ -21,10 +21,10 @@ class _TelaListaState extends State<TelaLista> {
                   FirebaseFirestore.instance.collection('spotify').snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return const Text(
-                    'Espere um pouco',
-                    style: TextStyle(
-                      color: Colors.white,
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: Color.fromRGBO(50, 205, 50, 1),
+                      strokeWidth: 10.0,
                     ),
                   );
                 } else {
@@ -108,7 +108,7 @@ class _TelaListaState extends State<TelaLista> {
                             final random = Random();
                             List playlist = [];
                             List artistas = [];
-                            List ids = [];
+                            // List ids = [];
                             var listaRef = [];
                             for (int i = 0; i < 10; i++) {
                               var index = random.nextInt(listaMusicas.length);
@@ -117,12 +117,12 @@ class _TelaListaState extends State<TelaLista> {
                               var id = listaId[index];
                               DocumentReference musicasRef = db.doc(id);
 
-                              if (playlist.contains(musica)) {
+                              if (listaRef.contains(musicasRef)) {
                                 i -= 1;
                               } else {
                                 playlist.add(musica);
                                 artistas.add(artista);
-                                ids.add(id);
+                                // ids.add(id);
                                 listaRef.add(musicasRef);
                               }
                             }
@@ -132,7 +132,7 @@ class _TelaListaState extends State<TelaLista> {
                               arguments: {
                                 'playlist': playlist,
                                 'artistas': artistas,
-                                'id': ids,
+                                // 'id': ids,
                                 'referencias': listaRef,
                               },
                             );
@@ -227,141 +227,6 @@ class _TelaListaState extends State<TelaLista> {
           ),
         ],
       ),
-      // body: Column(
-      //   crossAxisAlignment: CrossAxisAlignment.center,
-      //   children: [
-      //     const SizedBox(
-      //       height: 48,
-      //     ),
-      //     Text(
-      //       'Foram retornadas: ${listaMusicas.length.toString()} músicas',
-      //       style: const TextStyle(
-      //         color: Colors.white,
-      //         fontSize: 16,
-      //       ),
-      //     ),
-      //     Expanded(
-      //       child: ListView.builder(
-      //         itemCount: listaMusicas.length,
-      //         itemBuilder: (context, index) {
-      //           return ListTile(
-      //             title: Text(
-      //               listaMusicas[index],
-      //               style: const TextStyle(
-      //                 color: Colors.white,
-      //               ),
-      //             ),
-      //             onTap: () {},
-      //           );
-      //         },
-      //       ),
-      //     ),
-      //     Container(
-      //       height: 72,
-      //       width: double.infinity,
-      //       decoration: const BoxDecoration(
-      //         color: Color.fromRGBO(36, 36, 36, 1),
-      //         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      //       ),
-      //       child: Row(
-      //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-      //         children: [
-      //           Column(
-      //             children: [
-      //               IconButton(
-      //                 onPressed: () {
-      //                   Navigator.pushNamed(context, '/home');
-      //                 },
-      //                 icon: const Icon(
-      //                   Icons.save,
-      //                   color: Color.fromRGBO(248, 250, 255, 1),
-      //                   size: 24,
-      //                 ),
-      //               ),
-      //               const Text(
-      //                 'Playlists',
-      //                 style: TextStyle(
-      //                   fontFamily: 'Roboto',
-      //                   fontSize: 12,
-      //                   fontWeight: FontWeight.w400,
-      //                   color: Color.fromRGBO(248, 250, 255, 1),
-      //                 ),
-      //               ),
-      //             ],
-      //           ),
-      //           Column(
-      //             children: [
-      //               IconButton(
-      //                 onPressed: () {},
-      //                 icon: const Icon(
-      //                   Icons.add_circle_outline,
-      //                   color: Color.fromRGBO(50, 205, 50, 1),
-      //                   size: 24,
-      //                 ),
-      //               ),
-      //               const Text(
-      //                 'Gerar Playlist',
-      //                 style: TextStyle(
-      //                   fontFamily: 'Roboto',
-      //                   fontSize: 12,
-      //                   fontWeight: FontWeight.w400,
-      //                   color: Color.fromRGBO(50, 205, 50, 1),
-      //                 ),
-      //               ),
-      //             ],
-      //           ),
-      //           Column(
-      //             children: [
-      //               IconButton(
-      //                 onPressed: () {
-      //                   Navigator.pushNamed(context, '/perfil');
-      //                 },
-      //                 icon: const Icon(
-      //                   Icons.perm_identity,
-      //                   color: Color.fromRGBO(248, 250, 255, 1),
-      //                   size: 24,
-      //                 ),
-      //               ),
-      //               const Text(
-      //                 'Perfil',
-      //                 style: TextStyle(
-      //                   fontFamily: 'Roboto',
-      //                   fontSize: 12,
-      //                   fontWeight: FontWeight.w400,
-      //                   color: Color.fromRGBO(248, 250, 255, 1),
-      //                 ),
-      //               ),
-      //             ],
-      //           ),
-      //         ],
-      //       ),
-      //     )
-      //   ],
-      // ),
-    );
-  }
-
-  body() {
-    return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection('spotify').snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const Text('Espere um pouco');
-        } else {
-          return ListView.builder(
-            itemCount: 10,
-            itemBuilder: (context, index) {
-              DocumentSnapshot musicas = snapshot.data!.docs[index];
-              return Text(
-                '${musicas['nome']} | ${musicas['artista']}',
-                style: const TextStyle(
-                  color: Colors.white,
-                ),
-              );
-            },
-          );
-        }
-      },
     );
   }
 }

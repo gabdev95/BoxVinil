@@ -18,8 +18,6 @@ class _TelaPlaylistState extends State<TelaPlaylist> {
     String nomePLaylist = argumentos['titulo'];
     String docId = argumentos['docId'];
     List idMusicas = argumentos['idRefMusicas'];
-    List nomeMusicas = argumentos['lista'];
-    List nomeArtistas = argumentos['artistas'];
 
     return Scaffold(
       body: Column(
@@ -121,12 +119,21 @@ class _TelaPlaylistState extends State<TelaPlaylist> {
           ),
           Expanded(
             child: FutureBuilder(
-              future: Future.wait(
-                  [getNomeMusicas(idMusicas), getNomeArtistas(idMusicas)]),
+              future: Future.wait([
+                getNomeMusicas(idMusicas),
+                getNomeArtistas(idMusicas),
+              ]),
               builder: (context, musicaSnapshot) {
                 if (!musicaSnapshot.hasData) {
-                  return CircularProgressIndicator();
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: Color.fromRGBO(50, 205, 50, 1),
+                      // backgroundColor: Color.fromRGBO(179, 179, 179, 1),
+                      strokeWidth: 10.0,
+                    ),
+                  );
                 }
+                // Recebendo os dados dos métodos getNome
                 List musicas = musicaSnapshot.data![0];
                 List artistas = musicaSnapshot.data![1];
                 return ListView.builder(
@@ -155,80 +162,6 @@ class _TelaPlaylistState extends State<TelaPlaylist> {
               },
             ),
           ),
-          // Expanded(
-          //   child: StreamBuilder(
-          //     stream:
-          //         FirebaseFirestore.instance.collection('playlist').snapshots(),
-          //     builder: (context, snapshot) {
-          //       if (!snapshot.hasData) {
-          //         return CircularProgressIndicator();
-          //       } else {
-          //         List playlists = snapshot.data!.docs;
-
-          //         return FutureBuilder(
-          //           future: Future.wait([
-          //             getNomeMusicas(idMusicas),
-          //             getNomeArtistas(idMusicas)
-          //           ]),
-          //           builder: (context, musicaSnapshot) {
-          //             if (!musicaSnapshot.hasData) {
-          //               return CircularProgressIndicator();
-          //             }
-          //             List musicas = musicaSnapshot.data![0];
-          //             List artistas = musicaSnapshot.data![1];
-          //             return ListView.builder(
-          //               itemCount: musicas.length,
-          //               itemBuilder: (context, index) {
-          //                 return ListTile(
-          //                   title: Text(
-          //                     musicas[index],
-          //                     style: const TextStyle(
-          //                       color: Color.fromRGBO(179, 179, 179, 1),
-          //                       fontWeight: FontWeight.w400,
-          //                       fontSize: 19.2,
-          //                     ),
-          //                   ),
-          //                   subtitle: Text(
-          //                     artistas[index],
-          //                     style: const TextStyle(
-          //                       color: Color.fromRGBO(223, 219, 219, 1),
-          //                       fontWeight: FontWeight.w400,
-          //                       fontSize: 12,
-          //                     ),
-          //                   ),
-          //                 );
-          //               },
-          //             );
-          //           },
-          //         );
-          //       }
-          //     },
-          //   ),
-          // ),
-          // Expanded(
-          //   child: ListView.builder(
-          //     itemCount: idMusicas.length,
-          //     itemBuilder: (context, index) {
-          //       DocumentSnapshot id = idMusicas[index];
-
-          //       // List musicaRefs = List.from(playlist.get('musicas'));
-
-          //       return FutureBuilder(
-          //         future: getNome(idMusicas),
-          //         builder: (context, musicaSnapshot) {
-          //           if (!musicaSnapshot.hasData) {
-          //             return Text('Aguardando');
-          //           }
-          //           List musicas = musicaSnapshot.data as List;
-          //           print(musicas);
-          //           return ListTile(
-          //             title: Text(musicas[index]),
-          //           );
-          //         },
-          //       );
-          //     },
-          //   ),
-          // ),
           Container(
             height: 72,
             width: double.infinity,

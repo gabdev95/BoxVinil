@@ -15,10 +15,12 @@ class _TelaHomeState extends State<TelaHome> {
   final user = FirebaseAuth.instance.currentUser;
 
   String? nome = '';
+  String? email = '';
 
   @override
   Widget build(BuildContext context) {
     nome = user!.displayName;
+    email = user!.email;
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -80,18 +82,13 @@ class _TelaHomeState extends State<TelaHome> {
           ),
           Expanded(
             child: StreamBuilder(
-              stream:
-                  FirebaseFirestore.instance.collection('playlist').snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection('playlist')
+                  .where('usuario', isEqualTo: email)
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return const Text(
-                    'Não há playlists salvas',
-                    style: TextStyle(
-                        color: Color.fromRGBO(248, 250, 255, 1),
-                        fontFamily: 'Roboto',
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400),
-                  );
+                  return Container();
                 }
                 // Todas as playlists da coleção playlists
                 List playlists = snapshot.data!.docs;
@@ -109,22 +106,12 @@ class _TelaHomeState extends State<TelaHome> {
                         onPressed: () {
                           var dbPlaylist =
                               FirebaseFirestore.instance.collection('playlist');
-                          dbPlaylist
-                              .where('nome', isEqualTo: playlist['nome'])
-                              .get()
-                              .then((querySanpshot) {
-                            List musicas = [];
-                            List artistas = [];
+                          dbPlaylist.get().then((querySanpshot) {
                             List idRefMusicas = [];
 
                             for (var docSnapshot in querySanpshot.docs) {
-                              musicas = docSnapshot.data()['lista'];
-                              artistas = docSnapshot.data()['artistas'];
-                              // Lista com o docId das músicas da coleção spotify
                               idRefMusicas = docSnapshot.data()['musicas'];
                             }
-
-                            // teste(id);
 
                             Navigator.pushNamed(
                               context,
@@ -133,8 +120,6 @@ class _TelaHomeState extends State<TelaHome> {
                                 'titulo': playlist['nome'],
                                 'idRefMusicas': idRefMusicas,
                                 'docId': docIdPlaylist,
-                                'lista': musicas,
-                                'artistas': artistas,
                               },
                             );
                           });
@@ -247,31 +232,5 @@ class _TelaHomeState extends State<TelaHome> {
         ],
       ),
     );
-  }
-
-  Future teste(id) async {
-    var nomeMusicas = <Future>[];
-    var nomeArtistas = <Future>[];
-    var dbSpotify = FirebaseFirestore.instance.collection('spotify');
-
-    for (var index = 0; index < 10; index++) {
-      var docRef = dbSpotify.doc(id[index]);
-      docRef.get().then((docSnapshot) {
-        if (docSnapshot.exists) {
-          var data = docSnapshot.data();
-          nomeMusicas.add(data!['nome']);
-          nomeArtistas.add(data['artista']);
-          return nomeMusicas;
-        } else {
-          print('Documento não foi encontrado');
-        }
-        // Fora daqui não consigo mais acessar nomeMusicas ou nomeArtistas
-        print(nomeMusicas);
-      });
-    }
-    await Future.wait(nomeMusicas);
-    await Future.wait(nomeArtistas);
-    print(nomeMusicas);
-    print(nomeArtistas);
   }
 }

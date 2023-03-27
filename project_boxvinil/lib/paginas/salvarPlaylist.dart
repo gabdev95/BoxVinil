@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class TelaSalvarPlaylist extends StatefulWidget {
   const TelaSalvarPlaylist({super.key});
@@ -9,15 +10,20 @@ class TelaSalvarPlaylist extends StatefulWidget {
 }
 
 class _TelaSalvarPlaylistState extends State<TelaSalvarPlaylist> {
+  final user = FirebaseAuth.instance.currentUser;
+
+  String? email = '';
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic> argumentos =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
     List playlist = argumentos['playlist'];
     List artistas = argumentos['artistas'];
-    List id = argumentos['id'];
+    // List id = argumentos['id'];
     List musicas = argumentos['referencias'];
     final titulo = TextEditingController();
+
+    email = user?.email;
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,9 +124,10 @@ class _TelaSalvarPlaylistState extends State<TelaSalvarPlaylist> {
 
                     docPlaylist.set({
                       'nome': titulo.text,
-                      'lista': playlist,
-                      'artistas': artistas,
+                      // 'lista': playlist,
+                      // 'artistas': artistas,
                       'musicas': musicas,
+                      'usuario': email,
                     });
 
                     Navigator.pushNamed(context, '/home');
