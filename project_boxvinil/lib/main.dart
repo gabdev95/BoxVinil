@@ -8,6 +8,7 @@ import './paginas/perfil.dart';
 import 'paginas/home.dart';
 import './paginas/carregamento.dart';
 import './paginas/lista.dart';
+import 'paginas/salvarPlaylist.dart';
 import './paginas/playlist.dart';
 
 void main() async {
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
         '/perfil': (context) => const TelaPerfil(),
         '/configuracao': (context) => const TelaConfiguracao(),
         '/lista': (context) => const TelaLista(),
+        '/salvar': (context) => const TelaSalvarPlaylist(),
         '/playlist': (context) => const TelaPlaylist(),
       },
     );

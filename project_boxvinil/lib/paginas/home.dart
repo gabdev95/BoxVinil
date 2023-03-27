@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -10,32 +11,16 @@ class TelaHome extends StatefulWidget {
 }
 
 class _TelaHomeState extends State<TelaHome> {
+  // Chave para pegar o email está aqui
   final user = FirebaseAuth.instance.currentUser;
 
   String? nome = '';
-  List listaMusicas = [];
-  DatabaseReference ref = FirebaseDatabase.instance.ref().child('nome');
-
-  getNomesMusicas() async {
-    final snapshot = await ref.get();
-    if (snapshot.exists) {
-      setState(() {
-        listaMusicas = snapshot.value as List;
-      });
-      // ignore: use_build_context_synchronously
-      Navigator.pushNamed(
-        context,
-        '/lista',
-        arguments: listaMusicas,
-      );
-    } else {
-      print('Nenhum dado disponível');
-    }
-  }
+  String? email = '';
 
   @override
   Widget build(BuildContext context) {
     nome = user!.displayName;
+    email = user!.email;
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -64,7 +49,9 @@ class _TelaHomeState extends State<TelaHome> {
                       height: 40,
                       width: 40,
                       child: FloatingActionButton(
-                        onPressed: getNomesMusicas,
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/lista');
+                        },
                         backgroundColor: const Color.fromRGBO(50, 205, 50, 1),
                         child: const Icon(
                           Icons.add,
@@ -90,15 +77,74 @@ class _TelaHomeState extends State<TelaHome> {
                 const SizedBox(
                   height: 32,
                 ),
-                const Text(
-                  'Não há playlists salvas',
-                  style: TextStyle(
-                      color: Color.fromRGBO(248, 250, 255, 1),
-                      fontFamily: 'Roboto',
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400),
-                ),
               ],
+            ),
+          ),
+          Expanded(
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('playlist')
+                  .where('usuario', isEqualTo: email)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return Container();
+                }
+                // Todas as playlists da coleção playlists
+                List playlists = snapshot.data!.docs;
+
+                return ListView.builder(
+                  itemCount: snapshot.data?.docs.length,
+                  itemBuilder: (context, index) {
+                    // Informações de cada playlist
+                    DocumentSnapshot playlist = playlists[index];
+                    // Pegando id do documento da coleção playlist
+                    var docIdPlaylist = playlist.id;
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 34),
+                      child: TextButton(
+                        onPressed: () {
+                          var dbPlaylist =
+                              FirebaseFirestore.instance.collection('playlist');
+                          dbPlaylist.get().then((querySanpshot) {
+                            List idRefMusicas = [];
+
+                            for (var docSnapshot in querySanpshot.docs) {
+                              idRefMusicas = docSnapshot.data()['musicas'];
+                            }
+
+                            Navigator.pushNamed(
+                              context,
+                              '/playlist',
+                              arguments: {
+                                'titulo': playlist['nome'],
+                                'idRefMusicas': idRefMusicas,
+                                'docId': docIdPlaylist,
+                              },
+                            );
+                          });
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              playlist['nome'],
+                              style: const TextStyle(
+                                  fontSize: 19.2,
+                                  color: Color.fromRGBO(179, 179, 179, 1),
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            const Icon(
+                              Icons.check_circle_rounded,
+                              color: Color.fromRGBO(50, 205, 50, 1),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
             ),
           ),
 
