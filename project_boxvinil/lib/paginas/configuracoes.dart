@@ -60,7 +60,7 @@ class _TelaConfiguracaoState extends State<TelaConfiguracao> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(
-            height: 63,
+            height: 24,
           ),
           IconButton(
             padding: const EdgeInsets.fromLTRB(32, 0, 0, 0),
@@ -72,57 +72,87 @@ class _TelaConfiguracaoState extends State<TelaConfiguracao> {
               color: Color.fromRGBO(179, 179, 179, 1),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Text(
+              'Olá, $nome!',
+              style: const TextStyle(
+                color: Color.fromRGBO(248, 250, 255, 1),
+                fontSize: 23,
+                fontFamily: 'Roboto',
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(
                   height: 23,
                 ),
 
-                Text(
-                  'Olá, $nome!',
-                  style: const TextStyle(
-                    color: Color.fromRGBO(248, 250, 255, 1),
-                    fontSize: 23,
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-
                 // Imagem de perfil
 
-                CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      _imageFile!.path ?? "../assets/images/perfil.png"),
-                  radius: 50,
+                Container(
+                  alignment: Alignment.center,
+                  width: double.maxFinite,
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage(
+                        _imageFile!.path ?? "../assets/images/perfil.png"),
+                    radius: 80,
+                  ),
                 ),
 
                 // Pick Image
                 Column(
                   children: [
-                    ElevatedButton(
+                    TextButton.icon(
                       onPressed: _pickImage,
-                      child: Text('Atualizar Imagem'),
+                      icon: const Icon(
+                        Icons.image,
+                        size: 16,
+                        color: Color.fromRGBO(179, 179, 179, 1),
+                      ),
+                      label: const Text(
+                        "Atualizar imagem",
+                        style: TextStyle(
+                          color: Color.fromRGBO(179, 179, 179, 1),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 64,
                     ),
                   ],
                 ),
 
-                const SizedBox(
-                  height: 32,
-                ),
+                // // Pick Image
+                // Column(
+                //   children: [
+                //     ElevatedButton(
+                //       onPressed: _pickImage,
+                //       child: Text('Atualizar Imagem'),
+                //     ),
+                //     const SizedBox(
+                //       height: 64,
+                //     ),
+                //   ],
+                // ),
 
-                const Text(
-                  'Alterar seu nome',
-                  style: TextStyle(
-                    color: Color.fromRGBO(255, 255, 255, 1),
-                    fontFamily: 'Roboto',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
+                const SizedBox(
+                  width: 296,
+                  child: Text(
+                    'Alterar seu nome',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: Color.fromRGBO(248, 250, 255, 1),
+                      fontFamily: 'Roboto',
+                      fontSize: 16,
+                    ),
                   ),
                 ),
-
                 const SizedBox(
                   height: 8,
                 ),
@@ -144,7 +174,7 @@ class _TelaConfiguracaoState extends State<TelaConfiguracao> {
                   ),
                 ),
                 const SizedBox(
-                  height: 24,
+                  height: 42,
                 ),
 
                 // Botão de salvar
@@ -153,7 +183,7 @@ class _TelaConfiguracaoState extends State<TelaConfiguracao> {
                     backgroundColor: const Color.fromRGBO(50, 205, 50, 1),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8)),
-                    minimumSize: const Size(296, 40),
+                    fixedSize: const Size(296, 40),
                   ),
                   onPressed: () async {
                     if (_nome.text != '') {

@@ -114,11 +114,10 @@ class _TelaPerfilState extends State<TelaPerfil> {
                 //Imagem de perfil
 
                 Container(
-                  width: 100,
-                  height: 100,
                   alignment: Alignment.center,
+                  width: double.maxFinite,
                   child: CircleAvatar(
-                    radius: 50,
+                    radius: 80,
                     backgroundImage: NetworkImage(
                         user!.photoURL ?? "../assets/images/perfil.png"),
                   ),
