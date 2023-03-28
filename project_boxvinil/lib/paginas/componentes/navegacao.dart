@@ -1,7 +1,36 @@
 import 'package:flutter/material.dart';
 
 class BarraNavegacao extends StatelessWidget {
-  const BarraNavegacao({super.key});
+  const BarraNavegacao({
+    super.key,
+    required this.perfilTexto,
+    required this.perfilColorTexto,
+    required this.perfilColorIcon,
+    required this.fnPerfil,
+    required this.gerarPlayTexto,
+    required this.gerarPlayColorTexto,
+    required this.gerarPlayColorIcon,
+    required this.fnGerarPlay,
+    required this.playlistsTexto,
+    required this.playlistsColorTexto,
+    required this.playlistsColorIcon,
+    required this.fnPlaylists,
+  });
+
+  final String perfilTexto;
+  final Color? perfilColorTexto;
+  final Color? perfilColorIcon;
+  final Function()? fnPerfil;
+
+  final String gerarPlayTexto;
+  final Color? gerarPlayColorTexto;
+  final Color? gerarPlayColorIcon;
+  final Function()? fnGerarPlay;
+
+  final String playlistsTexto;
+  final Color? playlistsColorTexto;
+  final Color? playlistsColorIcon;
+  final Function()? fnPlaylists;
 
   @override
   Widget build(BuildContext context) {
@@ -18,22 +47,20 @@ class BarraNavegacao extends StatelessWidget {
           Column(
             children: [
               IconButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/home');
-                },
-                icon: const Icon(
+                onPressed: fnPlaylists,
+                icon: Icon(
                   Icons.save,
-                  color: Color.fromRGBO(248, 250, 255, 1),
+                  color: playlistsColorIcon,
                   size: 24,
                 ),
               ),
-              const Text(
-                'Playlists',
+              Text(
+                playlistsTexto,
                 style: TextStyle(
                   fontFamily: 'Roboto',
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
-                  color: Color.fromRGBO(248, 250, 255, 1),
+                  color: playlistsColorTexto,
                 ),
               ),
             ],
@@ -41,22 +68,20 @@ class BarraNavegacao extends StatelessWidget {
           Column(
             children: [
               IconButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/lista');
-                },
-                icon: const Icon(
+                onPressed: fnGerarPlay,
+                icon: Icon(
                   Icons.add_circle_outline,
-                  color: Color.fromRGBO(248, 250, 255, 1),
+                  color: gerarPlayColorIcon,
                   size: 24,
                 ),
               ),
-              const Text(
-                'Gerar Playlist',
+              Text(
+                gerarPlayTexto,
                 style: TextStyle(
                   fontFamily: 'Roboto',
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
-                  color: Color.fromRGBO(248, 250, 255, 1),
+                  color: gerarPlayColorTexto,
                 ),
               ),
             ],
@@ -64,20 +89,20 @@ class BarraNavegacao extends StatelessWidget {
           Column(
             children: [
               IconButton(
-                onPressed: () {},
-                icon: const Icon(
+                onPressed: fnPerfil,
+                icon: Icon(
                   Icons.perm_identity,
-                  color: Color.fromRGBO(50, 205, 50, 1),
+                  color: perfilColorIcon,
                   size: 24,
                 ),
               ),
-              const Text(
-                'Perfil',
+              Text(
+                perfilTexto,
                 style: TextStyle(
                   fontFamily: 'Roboto',
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
-                  color: Color.fromRGBO(50, 205, 50, 1),
+                  color: perfilColorTexto,
                 ),
               ),
             ],

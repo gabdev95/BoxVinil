@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
+import './componentes/campoForm.dart';
+import './componentes/botao_entrar_cadastrar.dart';
 
 class TelaConfiguracao extends StatefulWidget {
   const TelaConfiguracao({super.key});
@@ -22,7 +24,7 @@ class _TelaConfiguracaoState extends State<TelaConfiguracao> {
   void initState() {
     super.initState();
     _imageFile = File(user?.photoURL ?? "../assets/images/perfil.png");
-    _nome.text = user?.displayName ?? "";
+    // _nome.text = user?.displayName ?? "";
   }
 
   Future<void> _pickImage() async {
@@ -128,19 +130,6 @@ class _TelaConfiguracaoState extends State<TelaConfiguracao> {
                   ],
                 ),
 
-                // // Pick Image
-                // Column(
-                //   children: [
-                //     ElevatedButton(
-                //       onPressed: _pickImage,
-                //       child: Text('Atualizar Imagem'),
-                //     ),
-                //     const SizedBox(
-                //       height: 64,
-                //     ),
-                //   ],
-                // ),
-
                 const SizedBox(
                   width: 296,
                   child: Text(
@@ -158,34 +147,20 @@ class _TelaConfiguracaoState extends State<TelaConfiguracao> {
                 ),
 
                 // Campo de Alterar nome
-                TextFormField(
+                CampoForm(
                   controller: _nome,
                   obscureText: false,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: const Color.fromRGBO(248, 250, 255, 1),
-                    hintText: 'Ex.: Joao',
-                    contentPadding: const EdgeInsets.fromLTRB(22, 8, 0, 8),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    constraints:
-                        const BoxConstraints(maxWidth: 296, maxHeight: 40),
-                  ),
+                  hintText: 'Ex.: Joao',
+                  validator: (_) => null,
                 ),
+
                 const SizedBox(
                   height: 42,
                 ),
 
                 // Botão de salvar
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromRGBO(50, 205, 50, 1),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                    fixedSize: const Size(296, 40),
-                  ),
-                  onPressed: () async {
+                BotaoEntrarCadastrar(
+                  fn: () async {
                     if (_nome.text != '') {
                       _uploadUser();
                       showDialog(
@@ -221,14 +196,7 @@ class _TelaConfiguracaoState extends State<TelaConfiguracao> {
                       print('Nome não pode estar vazio');
                     }
                   },
-                  child: const Text(
-                    'Salvar',
-                    style: TextStyle(
-                      fontSize: 19.2,
-                      fontFamily: 'Roboto',
-                      color: Color.fromRGBO(248, 250, 255, 1),
-                    ),
-                  ),
+                  texto: 'Salvar',
                 ),
               ],
             ),

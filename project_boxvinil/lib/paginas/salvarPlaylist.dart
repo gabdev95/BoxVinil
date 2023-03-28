@@ -17,13 +17,15 @@ class _TelaSalvarPlaylistState extends State<TelaSalvarPlaylist> {
   Widget build(BuildContext context) {
     Map<String, dynamic> argumentos =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+
     List playlist = argumentos['playlist'];
     List artistas = argumentos['artistas'];
-    // List id = argumentos['id'];
     List musicas = argumentos['referencias'];
+
     final titulo = TextEditingController();
 
     email = user?.email;
+
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,8 +126,6 @@ class _TelaSalvarPlaylistState extends State<TelaSalvarPlaylist> {
 
                     docPlaylist.set({
                       'nome': titulo.text,
-                      // 'lista': playlist,
-                      // 'artistas': artistas,
                       'musicas': musicas,
                       'usuario': email,
                     });
