@@ -66,23 +66,6 @@ class _TelaPerfilState extends State<TelaPerfil> {
     }
   }
 
-  // getNomesMusicas() async {
-  //   final snapshot = await ref.get();
-  //   if (snapshot.exists) {
-  //     setState(() {
-  //       listaMusicas = snapshot.value as List;
-  //     });
-  //     // ignore: use_build_context_synchronously
-  //     Navigator.pushNamed(
-  //       context,
-  //       '/lista',
-  //       arguments: listaMusicas,
-  //     );
-  //   } else {
-  //     print('Nenhum dado disponível');
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     nome = user!.displayName;
