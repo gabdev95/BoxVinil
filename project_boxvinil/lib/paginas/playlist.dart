@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import './componentes/navegacao.dart';
+import './componentes/popup.dart';
 
 class TelaPlaylist extends StatefulWidget {
   const TelaPlaylist({super.key});
@@ -51,65 +53,9 @@ class _TelaPlaylistState extends State<TelaPlaylist> {
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                IconButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text('Excluir playlist'),
-                        content: const Text(
-                            'Essa playlist será excluída da sua aba de playlists salvas, você está ciente disso?'),
-                        actions: [
-                          Container(
-                            height: 33,
-                            width: 50,
-                            decoration: const BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                              width: 3,
-                              color: Colors.red,
-                            ))),
-                            child: TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text(
-                                'Não',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ),
-                          ElevatedButton(
-                            style: const ButtonStyle(
-                              backgroundColor: MaterialStatePropertyAll(
-                                Color.fromRGBO(50, 205, 50, 1),
-                              ),
-                            ),
-                            onPressed: () {
-                              final docPlaylist = FirebaseFirestore.instance
-                                  .collection('playlist');
-
-                              docPlaylist.doc(docId).delete();
-
-                              Navigator.pushNamed(context, '/home');
-                            },
-                            child: const Text(
-                              'Sim',
-                              style: TextStyle(
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.cancel_outlined,
-                    color: Color.fromRGBO(179, 179, 179, 1),
-                  ),
+                // PopUp para excluir playlist
+                PopUp(
+                  id: docId,
                 ),
               ],
             ),
@@ -128,7 +74,6 @@ class _TelaPlaylistState extends State<TelaPlaylist> {
                   return const Center(
                     child: CircularProgressIndicator(
                       color: Color.fromRGBO(50, 205, 50, 1),
-                      // backgroundColor: Color.fromRGBO(179, 179, 179, 1),
                       strokeWidth: 10.0,
                     ),
                   );
@@ -162,85 +107,25 @@ class _TelaPlaylistState extends State<TelaPlaylist> {
               },
             ),
           ),
-          Container(
-            height: 72,
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              color: Color.fromRGBO(36, 36, 36, 1),
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Column(
-                  children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.save,
-                        color: Color.fromRGBO(50, 205, 50, 1),
-                        size: 24,
-                      ),
-                    ),
-                    const Text(
-                      'Playlists',
-                      style: TextStyle(
-                        fontFamily: 'Roboto',
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: Color.fromRGBO(50, 205, 50, 1),
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/lista');
-                      },
-                      icon: const Icon(
-                        Icons.add_circle_outline,
-                        color: Color.fromRGBO(248, 250, 255, 1),
-                        size: 24,
-                      ),
-                    ),
-                    const Text(
-                      'Gerar Playlist',
-                      style: TextStyle(
-                        fontFamily: 'Roboto',
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: Color.fromRGBO(248, 250, 255, 1),
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/perfil');
-                      },
-                      icon: const Icon(
-                        Icons.perm_identity,
-                        color: Color.fromRGBO(248, 250, 255, 1),
-                        size: 24,
-                      ),
-                    ),
-                    const Text(
-                      'Perfil',
-                      style: TextStyle(
-                        fontFamily: 'Roboto',
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: Color.fromRGBO(248, 250, 255, 1),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+          BarraNavegacao(
+            perfilTexto: 'Perfil',
+            perfilColorTexto: const Color.fromRGBO(248, 250, 255, 1),
+            perfilColorIcon: const Color.fromRGBO(248, 250, 255, 1),
+            fnPerfil: () {
+              Navigator.pushNamed(context, '/perfil');
+            },
+            gerarPlayTexto: 'Gerar Playlist',
+            gerarPlayColorTexto: const Color.fromRGBO(248, 250, 255, 1),
+            gerarPlayColorIcon: const Color.fromRGBO(248, 250, 255, 1),
+            fnGerarPlay: () {
+              Navigator.pushNamed(context, '/lista');
+            },
+            playlistsTexto: 'Playlists',
+            playlistsColorTexto: const Color.fromRGBO(50, 205, 50, 1),
+            playlistsColorIcon: const Color.fromRGBO(50, 205, 50, 1),
+            fnPlaylists: () {
+              Navigator.pushNamed(context, '/home');
+            },
           ),
         ],
       ),

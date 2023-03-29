@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
 class Opcoes extends StatelessWidget {
-  final Widget icone;
-  final String texto;
-  final Function()? fn;
   const Opcoes({
     super.key,
     required this.fn,
     required this.icone,
     required this.texto,
   });
+
+  final Widget icone;
+  final String texto;
+  final Function()? fn;
 
   @override
   Widget build(BuildContext context) {
