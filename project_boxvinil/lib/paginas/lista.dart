@@ -15,12 +15,13 @@ class _TelaListaState extends State<TelaLista> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(
             height: 48,
           ),
-          const SizedBox(
-            width: 360,
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               'Selecione uma música',
               textAlign: TextAlign.left,

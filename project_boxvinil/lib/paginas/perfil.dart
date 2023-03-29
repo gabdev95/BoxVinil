@@ -14,60 +14,6 @@ class _TelaPerfilState extends State<TelaPerfil> {
   final user = FirebaseAuth.instance.currentUser;
 
   String? nome = '';
-<<<<<<< HEAD
-  // List listaMusicas = [];
-  // DatabaseReference ref = FirebaseDatabase.instance.ref().child('nome');
-
-  deletarCadastro() async {
-    try {
-      User? user = FirebaseAuth.instance.currentUser;
-      await user?.delete();
-      // ignore: use_build_context_synchronously
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          content: Container(
-            height: 40,
-            width: 240,
-            decoration: BoxDecoration(
-                color: const Color.fromRGBO(209, 0, 0, 1),
-                borderRadius: BorderRadius.circular(100)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(Icons.error_outline),
-                SizedBox(
-                  width: 8,
-                ),
-                Text(
-                  'Cadastro Excluído',
-                  style: TextStyle(
-                    fontSize: 19,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Roboto',
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-      );
-    } on FirebaseAuthException catch (err) {
-      if (err.code == 'requires-recent-login') {
-        print(
-            'Esta operação é sensível e requer uma nova autenticação. Por favor faça o login novamente!');
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-                'Esta operação é sensível e requer uma nova autenticação. Por favor faça o login novamente!'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }
-  }
-=======
->>>>>>> poo
 
   @override
   Widget build(BuildContext context) {
