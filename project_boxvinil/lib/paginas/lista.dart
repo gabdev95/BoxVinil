@@ -56,10 +56,10 @@ class _TelaListaState extends State<TelaLista> {
                     itemBuilder: (context, index) {
                       DocumentSnapshot musicas = snapshot.data!.docs[index];
                       return ListTile(
-                        leading: Container(
+                        leading: SizedBox(
                           height: 51,
                           width: 51,
-                          color: const Color.fromRGBO(223, 219, 219, 1),
+                          child: Image.network(musicas['URLimagem']),
                         ),
                         title: Text(
                           musicas['nome'],
