@@ -68,6 +68,7 @@ class _TelaPlaylistState extends State<TelaPlaylist> {
               future: Future.wait([
                 getNomeMusicas(idMusicas),
                 getNomeArtistas(idMusicas),
+                getImagens(idMusicas),
               ]),
               builder: (context, musicaSnapshot) {
                 if (!musicaSnapshot.hasData) {
@@ -81,10 +82,16 @@ class _TelaPlaylistState extends State<TelaPlaylist> {
                 // Recebendo os dados dos métodos getNome
                 List musicas = musicaSnapshot.data![0];
                 List artistas = musicaSnapshot.data![1];
+                List urlImagem = musicaSnapshot.data![2];
                 return ListView.builder(
                   itemCount: musicas.length,
                   itemBuilder: (context, index) {
                     return ListTile(
+                      leading: SizedBox(
+                        height: 51,
+                        width: 51,
+                        child: Image.network(urlImagem[index]),
+                      ),
                       title: Text(
                         musicas[index],
                         style: const TextStyle(
@@ -130,6 +137,16 @@ class _TelaPlaylistState extends State<TelaPlaylist> {
         ],
       ),
     );
+  }
+
+  Future<List<String>> getImagens(musicaRefs) async {
+    List<String> urlImagem = [];
+    for (var i = 0; i < musicaRefs.length; i++) {
+      DocumentSnapshot musicaSnapshot = await musicaRefs[i].get();
+      urlImagem.add(musicaSnapshot.get('URLimagem'));
+    }
+
+    return urlImagem;
   }
 
   Future<List<String>> getNomeMusicas(musicaRefs) async {
